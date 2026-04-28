@@ -1,0 +1,121 @@
+:root {
+  color-scheme: light;
+  --bg: #f6efe8;
+  --panel: rgba(255, 250, 245, 0.92);
+  --ink: #30211a;
+  --muted: #7b655b;
+  --accent: #c85d38;
+  --accent-soft: #f6d8ca;
+  --line: rgba(133, 92, 76, 0.16);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  margin: 0;
+  min-height: 100%;
+}
+
+body {
+  font-family: "Avenir Next", "PingFang SC", sans-serif;
+  color: var(--ink);
+  background:
+    radial-gradient(circle at top left, rgba(255, 219, 197, 0.56), transparent 30%),
+    linear-gradient(180deg, #fbf6f1 0%, var(--bg) 100%);
+}
+
+.page-shell {
+  min-height: 100vh;
+  padding: 24px;
+  display: grid;
+  gap: 18px;
+}
+
+.hero {
+  padding: 24px;
+  border-radius: 28px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  box-shadow: 0 18px 48px rgba(97, 69, 58, 0.08);
+}
+
+.hero h1,
+.tool-card h3 {
+  font-family: "Iowan Old Style", "Source Han Serif SC", serif;
+  margin: 0;
+}
+
+.hero p {
+  margin: 10px 0 0;
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+.agent-frame {
+  min-height: 72vh;
+  border-radius: 28px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.72);
+}
+
+.tool-card {
+  padding: 16px;
+  border-radius: 20px;
+  background: #fffaf7;
+  border: 1px solid var(--line);
+  box-shadow: 0 10px 30px rgba(79, 53, 43, 0.06);
+}
+
+.tool-card p {
+  margin: 8px 0 0;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.pill-row,
+.list-row {
+  margin-top: 12px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 7px 10px;
+  border-radius: 999px;
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.poi-list,
+.segment-list {
+  margin: 14px 0 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 10px;
+}
+
+.poi-item,
+.segment-item {
+  padding: 12px;
+  border-radius: 16px;
+  background: rgba(255, 246, 241, 0.82);
+  border: 1px solid rgba(200, 93, 56, 0.12);
+}
+
+.fallback-card pre {
+  overflow: auto;
+  white-space: pre-wrap;
+  word-break: break-word;
+  font-size: 12px;
+}

@@ -1,0 +1,368 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>POI Recall Demo</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --bg: #fff7fb;
+        --panel: rgba(255, 255, 255, 0.9);
+        --line: rgba(219, 107, 153, 0.22);
+        --text: #4a2e3a;
+        --muted: #8e6275;
+        --accent: linear-gradient(135deg, #e76499 0%, #c44fbe 100%);
+        --chip: rgba(231, 100, 153, 0.12);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+        background:
+          radial-gradient(circle at top left, rgba(248, 192, 221, 0.45), transparent 35%),
+          radial-gradient(circle at top right, rgba(255, 218, 229, 0.52), transparent 30%),
+          var(--bg);
+        color: var(--text);
+      }
+
+      .shell {
+        max-width: 1180px;
+        margin: 0 auto;
+        padding: 32px 20px 48px;
+      }
+
+      .hero {
+        margin-bottom: 18px;
+      }
+
+      .eyebrow {
+        margin: 0 0 10px;
+        font-size: 13px;
+        letter-spacing: 0.24em;
+        color: #d55f92;
+        text-transform: uppercase;
+      }
+
+      h1 {
+        margin: 0 0 12px;
+        font-size: clamp(28px, 4vw, 42px);
+        line-height: 1.1;
+      }
+
+      .desc {
+        margin: 0;
+        max-width: 760px;
+        color: var(--muted);
+        line-height: 1.7;
+      }
+
+      .panel {
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 28px;
+        box-shadow: 0 24px 70px rgba(214, 121, 163, 0.12);
+        backdrop-filter: blur(14px);
+      }
+
+      .form-panel {
+        padding: 22px;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 14px;
+      }
+
+      label {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        font-size: 14px;
+        color: var(--muted);
+      }
+
+      input {
+        width: 100%;
+        padding: 14px 16px;
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        background: rgba(255, 255, 255, 0.95);
+        font-size: 16px;
+        color: var(--text);
+      }
+
+      .actions {
+        display: flex;
+        gap: 12px;
+        margin-top: 16px;
+        flex-wrap: wrap;
+      }
+
+      button {
+        border: 0;
+        border-radius: 999px;
+        padding: 13px 22px;
+        font-size: 15px;
+        font-weight: 600;
+        cursor: pointer;
+        color: #fff;
+        background: var(--accent);
+        box-shadow: 0 16px 36px rgba(220, 94, 151, 0.26);
+      }
+
+      button.secondary {
+        color: #b04d7d;
+        background: rgba(231, 100, 153, 0.1);
+        box-shadow: none;
+      }
+
+      .status {
+        margin-top: 14px;
+        min-height: 24px;
+        color: var(--muted);
+      }
+
+      .meta {
+        margin-top: 22px;
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 14px;
+      }
+
+      .meta-card,
+      .result-card {
+        padding: 18px;
+        border-radius: 22px;
+        border: 1px solid var(--line);
+        background: rgba(255, 255, 255, 0.86);
+      }
+
+      .meta-title,
+      .result-rank {
+        margin: 0 0 10px;
+        font-size: 12px;
+        letter-spacing: 0.2em;
+        color: #d05c90;
+        text-transform: uppercase;
+      }
+
+      .meta-value {
+        margin: 0;
+        font-size: 18px;
+        line-height: 1.5;
+      }
+
+      .chips {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+
+      .chip {
+        padding: 8px 12px;
+        border-radius: 999px;
+        background: var(--chip);
+        color: #c04d84;
+        font-size: 13px;
+      }
+
+      .results {
+        margin-top: 22px;
+        display: grid;
+        gap: 14px;
+      }
+
+      .result-card h3 {
+        margin: 0 0 8px;
+        font-size: 22px;
+      }
+
+      .result-card p {
+        margin: 0;
+        line-height: 1.7;
+        color: var(--muted);
+      }
+
+      .result-meta {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-top: 14px;
+      }
+
+      .result-meta span {
+        padding: 8px 12px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.95);
+        border: 1px solid var(--line);
+        font-size: 13px;
+        color: #ba4d80;
+      }
+
+      pre {
+        margin: 22px 0 0;
+        padding: 20px;
+        overflow: auto;
+        border-radius: 22px;
+        background: #fff;
+        border: 1px solid var(--line);
+        color: #5c3850;
+        line-height: 1.55;
+      }
+
+      @media (max-width: 920px) {
+        .grid,
+        .meta {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="shell">
+      <section class="hero">
+        <p class="eyebrow">POI Recall Demo</p>
+        <h1>只看腾讯地图 POI 召回，不做路线规划</h1>
+        <p class="desc">
+          这个页面不会做花点决策、Agent 路由、路径规划或本地回退。它只会把你的关键词发给
+          <code>/demo/poi-search</code>，然后把腾讯地图召回的候选、排序结果和原始参数直接展示出来。
+          这里默认按全北京区域检索，不加附近半径限制。
+        </p>
+      </section>
+
+      <section class="panel form-panel">
+        <div class="grid">
+          <label>
+            检索词
+            <input id="query" value="紫荆食堂" placeholder="例如：紫荆食堂、清芬食堂、图书馆、麦当劳" />
+          </label>
+          <label>
+            锚点名称
+            <input id="anchorName" value="清华大学计算机科学与技术系" placeholder="例如：清华大学建筑学院" />
+          </label>
+        </div>
+        <div class="actions">
+          <button id="searchBtn" type="button">只检索 POI</button>
+          <button id="demoBtn" type="button" class="secondary">试一下“清芬食堂”</button>
+        </div>
+        <div id="status" class="status">准备就绪。</div>
+      </section>
+
+      <section class="meta" id="meta"></section>
+      <section class="results" id="results"></section>
+      <pre id="raw">等待检索结果...</pre>
+    </main>
+
+    <script>
+      const queryInput = document.getElementById("query");
+      const anchorNameInput = document.getElementById("anchorName");
+      const statusEl = document.getElementById("status");
+      const metaEl = document.getElementById("meta");
+      const resultsEl = document.getElementById("results");
+      const rawEl = document.getElementById("raw");
+      const searchBtn = document.getElementById("searchBtn");
+      const demoBtn = document.getElementById("demoBtn");
+
+      function renderMeta(result) {
+        metaEl.innerHTML = "";
+        const cards = [
+          { title: "检索词", value: result.query },
+          { title: "锚点", value: `${result.anchor.name} · ${result.anchor.lat.toFixed(6)}, ${result.anchor.lng.toFixed(6)}` },
+          { title: "锚点解析", value: result.anchorQuery ? `${result.anchorQuery} -> ${result.anchorResolvedBy}` : result.anchorResolvedBy },
+          { title: "选择策略", value: result.selectionStrategy || "raw_query_recall" },
+          { title: "候选总数", value: String(result.totalCandidates || 0) },
+        ];
+        cards.forEach((item) => {
+          const card = document.createElement("article");
+          card.className = "meta-card";
+          card.innerHTML = `<p class="meta-title">${item.title}</p><p class="meta-value">${item.value}</p>`;
+          metaEl.appendChild(card);
+        });
+
+        const keywordsCard = document.createElement("article");
+        keywordsCard.className = "meta-card";
+        keywordsCard.style.gridColumn = "1 / -1";
+        keywordsCard.innerHTML = `<p class="meta-title">实际发出的关键词</p><div class="chips">${(result.keywords || [])
+          .map((item) => `<span class="chip">${item}</span>`)
+          .join("")}</div>`;
+        metaEl.appendChild(keywordsCard);
+      }
+
+      function renderResults(result) {
+        resultsEl.innerHTML = "";
+        if (!result.candidates || !result.candidates.length) {
+          resultsEl.innerHTML = '<article class="result-card"><p class="result-rank">No Result</p><h3>没有召回到候选</h3><p>这次请求没有拿到可用 POI，你可以换一个关键词或调整锚点再试。</p></article>';
+          return;
+        }
+        result.candidates.forEach((item) => {
+          const card = document.createElement("article");
+          card.className = "result-card";
+          card.innerHTML = `
+            <p class="result-rank">Rank ${item.rank}</p>
+            <h3>${item.name}</h3>
+            <p>${item.address || "暂无地址信息"}</p>
+            <div class="result-meta">
+              <span>距离：${item.distanceMeters} m</span>
+              <span>分数：${item.heuristicScore}</span>
+              <span>坐标：${item.lat.toFixed(6)}, ${item.lng.toFixed(6)}</span>
+            </div>
+          `;
+          resultsEl.appendChild(card);
+        });
+      }
+
+      async function runSearch() {
+        const query = queryInput.value.trim();
+        const anchorName = anchorNameInput.value.trim();
+        if (!query) {
+          statusEl.textContent = "请先输入检索词。";
+          return;
+        }
+
+        statusEl.textContent = "正在检索腾讯地图 POI...";
+        resultsEl.innerHTML = "";
+        rawEl.textContent = "请求中...";
+
+        try {
+          const response = await fetch("http://localhost:9000/demo/poi-search", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              query,
+              anchor: {
+                name: anchorName,
+              },
+            }),
+          });
+          const payload = await response.json();
+          if (!response.ok || !payload.ok) {
+            throw new Error(payload.error || "poi search failed");
+          }
+          statusEl.textContent = `检索完成，共召回 ${payload.result.totalCandidates} 个候选。`;
+          renderMeta(payload.result);
+          renderResults(payload.result);
+          rawEl.textContent = JSON.stringify(payload.result, null, 2);
+        } catch (error) {
+          statusEl.textContent = `检索失败：${error.message || error}`;
+          metaEl.innerHTML = "";
+          resultsEl.innerHTML = "";
+          rawEl.textContent = String(error.stack || error.message || error);
+        }
+      }
+
+      searchBtn.addEventListener("click", runSearch);
+      demoBtn.addEventListener("click", () => {
+        queryInput.value = "清芬食堂";
+        runSearch();
+      });
+    </script>
+  </body>
+</html>
