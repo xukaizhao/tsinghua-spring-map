@@ -1,6 +1,6 @@
 # 从花讯到路线：基于腾讯位置服务与Agent的城市赏花地图实践——以清华大学春季赏花为例
 
-一个面向“季节性城市漫游”场景的地图应用原型，详细推文介绍位于：。
+一个面向“季节性城市漫游”场景的地图应用原型，详细推文介绍位于：https://blog.csdn.net/weixin_44792382/article/details/160585879?fromshare=blogdetail&sharetype=blogdetail&sharerId=160585879&sharerefer=PC&sharesource=weixin_44792382&sharefrom=from_link。
 
 项目以清华大学春季赏花为示例，尝试把“花讯信息 + 地点检索 + 路线规划 + Agent 交互”串成一条完整链路：用户用自然语言描述需求，系统结合场景知识、候选花点、补给点与步行路线能力，生成可执行、可解释、可展示的赏花路线。
 
